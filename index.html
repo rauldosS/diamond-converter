@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora do App</title>
+    <style>
+        /* Reset e Fonte */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f5f9;
+            /* Fundo suave */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Container Principal */
+        .calculadora {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Cabeçalho */
+        .header h2 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            color: #1a1b25;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header p {
+            margin: 0 0 24px 0;
+            font-size: 14px;
+            color: #6e7381;
+        }
+
+        /* Grid de Inputs (2 colunas) */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        /* Estilo dos Campos */
+        .input-box {
+            background-color: #fcfcfd;
+            border: 1px solid #e8eaf1;
+            border-radius: 12px;
+            padding: 12px 16px;
+            transition: border-color 0.2s;
+        }
+
+        .input-box:focus-within {
+            border-color: #4b00ff;
+        }
+
+        /* Campo extra para o BRL ocupando as duas colunas */
+        .input-box.full-width {
+            grid-column: span 2;
+            background-color: #f8f9ff;
+            /* Leve destaque */
+        }
+
+        .input-box label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1b25;
+            margin-bottom: 8px;
+        }
+
+        .input-box input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            font-weight: 500;
+            color: #1a1b25;
+            outline: none;
+        }
+
+        /* Status da API */
+        .api-status {
+            font-size: 11px;
+            color: #6e7381;
+            margin-top: 4px;
+            display: block;
+        }
+
+        /* Botões */
+        .btn-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        .btn-limpar {
+            background-color: #f0f2f8;
+            color: #3b2bc7;
+        }
+
+        .btn-fechar {
+            width: 100%;
+            background-color: #f0f2f8;
+            color: #3b2bc7;
+            margin-top: 16px;
+        }
+
+        /* Caixa de Regra Fixa */
+        .regra-fixa {
+            background-color: #fcfcfd;
+            border: 1px solid #e8eaf1;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 13px;
+            color: #6e7381;
+            line-height: 1.5;
+        }
+
+        .regra-fixa strong {
+            color: #4b00ff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="calculadora">
+        <div class="header">
+            <h2>🧮 Calculadora do App</h2>
+            <p>Preencha qualquer campo para calcular automaticamente os demais.</p>
+        </div>
+
+        <div class="grid">
+            <div class="input-box">
+                <label>💎 Diamantes</label>
+                <input type="number" id="diamantes" placeholder="0">
+            </div>
+            <div class="input-box">
+                <label>⭐ Pontos</label>
+                <input type="number" id="pontos" placeholder="0">
+            </div>
+            <div class="input-box">
+                <label>💵 Dólares</label>
+                <input type="number" id="dolares" placeholder="0.00" step="0.01">
+            </div>
+            <div class="input-box">
+                <label>💖 Charme</label>
+                <input type="number" id="charme" placeholder="0">
+            </div>
+
+            <div class="input-box full-width">
+                <label>🇧🇷 Valor em Reais (BRL)</label>
+                <input type="number" id="reais" placeholder="0.00" readonly>
+                <span class="api-status" id="status-cotacao">Aguardando valor em dólares...</span>
+            </div>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-limpar" onclick="limparCampos()">Limpar</button>
+        </div>
+
+        <div class="regra-fixa">
+            <strong>Regra fixa:</strong> 1 diamante = 700 pontos | 12.000.000 pontos = US$ 20 | 5 diamantes = 1 charme.
+        </div>
+
+        <button class="btn btn-fechar">Fechar</button>
+    </div>
+
+    <script>
+        // Referências dos campos
+        const inputs = {
+            diamantes: document.getElementById('diamantes'),
+            pontos: document.getElementById('pontos'),
+            dolares: document.getElementById('dolares'),
+            charme: document.getElementById('charme'),
+            reais: document.getElementById('reais')
+        };
+        const statusCotacao = document.getElementById('status-cotacao');
+
+        let cotacaoDolarAtual = 0;
+
+        // 1. Busca a cotação do dólar na API ao carregar a página
+        async function buscarCotacaoAPI() {
+            statusCotacao.innerText = "Buscando cotação do dólar atual...";
+            try {
+                const resposta = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
+                const dados = await resposta.json();
+                cotacaoDolarAtual = parseFloat(dados.USDBRL.ask);
+                statusCotacao.innerText = `Cotação do dia: US$ 1 = R$ ${cotacaoDolarAtual.toFixed(2)}`;
+                calcularReais(); // Se já houver dólares, calcula
+            } catch (erro) {
+                statusCotacao.innerText = "Erro ao buscar cotação. Verifique a internet.";
+            }
+        }
+
+        // 2. Lógica matemática baseada nas regras da imagem
+        function calcularTudo(origem) {
+            let d = 0; // Usaremos Diamantes (d) como a moeda base para calcular o resto
+
+            // Pega o valor do campo que o usuário está digitando
+            const valor = parseFloat(inputs[origem].value);
+            if (isNaN(valor) || valor < 0) {
+                // Se apagar tudo, não faz nada para os outros campos até ele digitar de novo
+                return;
+            }
+
+            // Descobre quantos "Diamantes" o valor equivale
+            if (origem === 'diamantes') {
+                d = valor;
+            } else if (origem === 'pontos') {
+                d = valor / 700;
+            } else if (origem === 'dolares') {
+                // Se 12.000.000 pts = $20, então $1 = 600.000 pts
+                const pontos = valor * 600000;
+                d = pontos / 700;
+            } else if (origem === 'charme') {
+                d = valor * 5;
+            }
+
+            // Agora atualiza todos os outros campos baseados no Diamante (d)
+            if (origem !== 'diamantes') inputs.diamantes.value = formatar(d);
+            if (origem !== 'pontos') inputs.pontos.value = formatar(d * 700);
+            if (origem !== 'dolares') inputs.dolares.value = formatar((d * 700) / 600000, 2);
+            if (origem !== 'charme') inputs.charme.value = formatar(d / 5);
+
+            // Por fim, calcula o valor real em BRL
+            calcularReais();
+        }
+
+        // Calcula os reais baseado no campo de dólares atual e na API
+        function calcularReais() {
+            const usd = parseFloat(inputs.dolares.value);
+            if (!isNaN(usd) && cotacaoDolarAtual > 0) {
+                inputs.reais.value = (usd * cotacaoDolarAtual).toFixed(2);
+            } else {
+                inputs.reais.value = "";
+            }
+        }
+
+        // Auxiliar para evitar muitos números quebrados na UI
+        function formatar(numero, decimais = 0) {
+            // Usa toFixed para arredondar corretamente sem bugs de ponto flutuante do JS
+            return Number(numero.toFixed(decimais));
+        }
+
+        // 3. Adiciona os gatilhos (Event Listeners)
+        // Usamos 'input' para atualizar instantaneamente a cada tecla
+        ['diamantes', 'pontos', 'dolares', 'charme'].forEach(campo => {
+            inputs[campo].addEventListener('input', (e) => calcularTudo(campo));
+        });
+
+        // Função do botão Limpar
+        function limparCampos() {
+            Object.values(inputs).forEach(input => input.value = '');
+        }
+
+        // Inicia a API
+        buscarCotacaoAPI();
+    </script>
+</body>
+
+</html>
