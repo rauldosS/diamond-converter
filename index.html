@@ -4,18 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora do App</title>
+    <title>Calculadora Kairos</title>
     <style>
-        /* Reset e Fonte */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg-dark: #050505;
+            --card-bg: #0c0c0c;
+            --gold: #d4af37;
+            --gold-dim: #997a15;
+            --border-color: #2a2a2a;
+            --text-light: #f0f0f0;
+            --text-muted: #888888;
+        }
+
         * {
             box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f5f9;
-            /* Fundo suave */
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+
+            /* 1. PLANO DE FUNDO GERAL (Setas apontando para as laterais na sua imagem) */
+            /* Aqui você coloca a imagem de fundo que tem a bússola grande opaca */
+            background-image: url('FUNDO_GERAL_AQUI.png'), radial-gradient(circle at center, #1a1505 0%, var(--bg-dark) 50%);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            color: var(--text-light);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
@@ -23,133 +43,196 @@
             padding: 20px;
         }
 
-        /* Container Principal */
         .calculadora {
-            background: #ffffff;
+            background: var(--card-bg);
             width: 100%;
-            max-width: 500px;
-            padding: 24px;
+            max-width: 550px;
+            padding: 32px;
             border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Cabeçalho */
+        /* 2. LOGO SUPERIOR */
+        .brand-header {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .img-logo {
+            max-width: 240px;
+            /* Ajuste o tamanho da sua logo aqui */
+            height: auto;
+            display: block;
+        }
+
         .header h2 {
             margin: 0 0 8px 0;
-            font-size: 20px;
-            color: #1a1b25;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--gold);
+        }
+
+        .header h2 span {
+            color: var(--text-light);
         }
 
         .header p {
             margin: 0 0 24px 0;
-            font-size: 14px;
-            color: #6e7381;
+            font-size: 13px;
+            color: var(--text-muted);
         }
 
-        /* Grid de Inputs (2 colunas) */
         .grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 16px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
         }
 
-        /* Estilo dos Campos */
         .input-box {
-            background-color: #fcfcfd;
-            border: 1px solid #e8eaf1;
-            border-radius: 12px;
+            background-color: #111111;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 12px 16px;
-            transition: border-color 0.2s;
+            transition: all 0.3s ease;
         }
 
         .input-box:focus-within {
-            border-color: #4b00ff;
+            border-color: var(--gold);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
         }
 
-        /* Campo extra para o BRL ocupando as duas colunas */
+        /* 3. IMAGEM DE FUNDO DO CAMPO DE REAIS */
         .input-box.full-width {
             grid-column: span 2;
-            background-color: #f8f9ff;
-            /* Leve destaque */
+            background-color: #111111;
+
+            /* Coloque a imagem da bússola dourada cortada aqui */
+            background-image: url('FUNDO_INPUT_REAIS_AQUI.png');
+            background-repeat: no-repeat;
+            background-position: right center;
+            background-size: contain;
+            /* Ou 'cover', dependendo do corte da sua imagem */
         }
 
         .input-box label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1a1b25;
-            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+            font-weight: 400;
+        }
+
+        .input-box label span {
+            color: var(--gold);
         }
 
         .input-box input {
             width: 100%;
             border: none;
             background: transparent;
-            font-size: 18px;
-            font-weight: 500;
-            color: #1a1b25;
+            font-size: 20px;
+            color: var(--text-light);
             outline: none;
+            font-family: 'Montserrat', sans-serif;
         }
 
-        /* Status da API */
         .api-status {
             font-size: 11px;
-            color: #6e7381;
-            margin-top: 4px;
+            color: var(--text-muted);
+            margin-top: 8px;
             display: block;
         }
 
         /* Botões */
-        .btn-row {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
         .btn {
-            flex: 1;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
+            width: 100%;
+            padding: 16px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--gold);
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: all 0.3s;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn:hover {
-            opacity: 0.8;
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
         }
 
-        .btn-limpar {
-            background-color: #f0f2f8;
-            color: #3b2bc7;
+        /* 4. ÍCONE DO BOTÃO FECHAR */
+        .img-icone-btn {
+            width: 30px;
+            /* Ajuste o tamanho do ícone aqui */
+            height: auto;
         }
 
-        .btn-fechar {
-            width: 100%;
-            background-color: #f0f2f8;
-            color: #3b2bc7;
-            margin-top: 16px;
-        }
-
-        /* Caixa de Regra Fixa */
         .regra-fixa {
-            background-color: #fcfcfd;
-            border: 1px solid #e8eaf1;
-            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
             padding: 16px;
-            font-size: 13px;
-            color: #6e7381;
-            line-height: 1.5;
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .regra-fixa .icon {
+            color: var(--gold);
+            font-size: 18px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
         }
 
         .regra-fixa strong {
-            color: #4b00ff;
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .social-links {
+            margin-top: 24px;
+            display: flex;
+            gap: 24px;
+        }
+
+        .social-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .social-links a:hover {
+            color: var(--gold);
         }
     </style>
 </head>
@@ -157,49 +240,57 @@
 <body>
 
     <div class="calculadora">
+        <div class="brand-header">
+            <img src="/src/images/kairos.png" alt="Kairos Agency" class="img-logo">
+        </div>
+
         <div class="header">
-            <h2>🧮 Calculadora do App</h2>
+            <h2>Calculadora <span>do App</span></h2>
             <p>Preencha qualquer campo para calcular automaticamente os demais.</p>
         </div>
 
         <div class="grid">
             <div class="input-box">
-                <label>💎 Diamantes</label>
+                <label><span>💎</span> Diamantes</label>
                 <input type="number" id="diamantes" placeholder="0">
             </div>
             <div class="input-box">
-                <label>⭐ Pontos</label>
+                <label><span>⭐</span> Pontos</label>
                 <input type="number" id="pontos" placeholder="0">
             </div>
             <div class="input-box">
-                <label>💵 Dólares</label>
+                <label><span>💵</span> Dólares</label>
                 <input type="number" id="dolares" placeholder="0.00" step="0.01">
             </div>
             <div class="input-box">
-                <label>💖 Charme</label>
+                <label><span>👑</span> Charme</label>
                 <input type="number" id="charme" placeholder="0">
             </div>
 
             <div class="input-box full-width">
-                <label>🇧🇷 Valor em Reais (BRL)</label>
-                <input type="number" id="reais" placeholder="0.00" readonly>
-                <span class="api-status" id="status-cotacao">Aguardando valor em dólares...</span>
+                <label><span>R$</span> Valor em Reais (BRL)</label>
+                <input type="number" id="reais" placeholder="0.00" step="0.01">
+                <span class="api-status" id="status-cotacao">Buscando cotação do dia...</span>
             </div>
         </div>
 
-        <div class="btn-row">
-            <button class="btn btn-limpar" onclick="limparCampos()">Limpar</button>
-        </div>
+        <button class="btn" onclick="limparCampos()"><span>↻</span> LIMPAR</button>
 
         <div class="regra-fixa">
-            <strong>Regra fixa:</strong> 1 diamante = 700 pontos | 12.000.000 pontos = US$ 20 | 5 diamantes = 1 charme.
+            <div class="icon">i</div>
+            <div>
+                <strong>Regra fixa:</strong> 1 diamante = 700 pontos | 12.000.000 pontos = US$ 20 | 5 diamantes = 1
+                charme.
+            </div>
         </div>
+    </div>
 
-        <button class="btn btn-fechar">Fechar</button>
+    <div class="social-links">
+        <a href="https://www.instagram.com/kaiiros.agency/" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@kairos.agency5" target="_blank">TikTok</a>
     </div>
 
     <script>
-        // Referências dos campos
         const inputs = {
             diamantes: document.getElementById('diamantes'),
             pontos: document.getElementById('pontos'),
@@ -208,85 +299,71 @@
             reais: document.getElementById('reais')
         };
         const statusCotacao = document.getElementById('status-cotacao');
-
         let cotacaoDolarAtual = 0;
 
-        // 1. Busca a cotação do dólar na API ao carregar a página
         async function buscarCotacaoAPI() {
-            statusCotacao.innerText = "Buscando cotação do dólar atual...";
             try {
                 const resposta = await fetch('https://economia.awesomeapi.com.br/last/USD-BRL');
                 const dados = await resposta.json();
                 cotacaoDolarAtual = parseFloat(dados.USDBRL.ask);
                 statusCotacao.innerText = `Cotação do dia: US$ 1 = R$ ${cotacaoDolarAtual.toFixed(2)}`;
-                calcularReais(); // Se já houver dólares, calcula
+
+                if (inputs.reais.value) {
+                    calcularTudo('reais');
+                } else if (inputs.dolares.value) {
+                    calcularTudo('dolares');
+                }
             } catch (erro) {
-                statusCotacao.innerText = "Erro ao buscar cotação. Verifique a internet.";
+                statusCotacao.innerText = "Erro ao buscar cotação. Verifique sua conexão.";
             }
         }
 
-        // 2. Lógica matemática baseada nas regras da imagem
         function calcularTudo(origem) {
-            let d = 0; // Usaremos Diamantes (d) como a moeda base para calcular o resto
-
-            // Pega o valor do campo que o usuário está digitando
+            let d = 0;
             const valor = parseFloat(inputs[origem].value);
-            if (isNaN(valor) || valor < 0) {
-                // Se apagar tudo, não faz nada para os outros campos até ele digitar de novo
-                return;
-            }
 
-            // Descobre quantos "Diamantes" o valor equivale
+            if (isNaN(valor) || valor < 0) return;
+
             if (origem === 'diamantes') {
                 d = valor;
             } else if (origem === 'pontos') {
                 d = valor / 700;
             } else if (origem === 'dolares') {
-                // Se 12.000.000 pts = $20, então $1 = 600.000 pts
                 const pontos = valor * 600000;
                 d = pontos / 700;
             } else if (origem === 'charme') {
                 d = valor * 5;
+            } else if (origem === 'reais') {
+                if (cotacaoDolarAtual <= 0) return;
+
+                const dolares = valor / cotacaoDolarAtual;
+                const pontos = dolares * 600000;
+                d = pontos / 700;
             }
 
-            // Agora atualiza todos os outros campos baseados no Diamante (d)
             if (origem !== 'diamantes') inputs.diamantes.value = formatar(d);
             if (origem !== 'pontos') inputs.pontos.value = formatar(d * 700);
             if (origem !== 'dolares') inputs.dolares.value = formatar((d * 700) / 600000, 2);
             if (origem !== 'charme') inputs.charme.value = formatar(d / 5);
 
-            // Por fim, calcula o valor real em BRL
-            calcularReais();
-        }
-
-        // Calcula os reais baseado no campo de dólares atual e na API
-        function calcularReais() {
-            const usd = parseFloat(inputs.dolares.value);
-            if (!isNaN(usd) && cotacaoDolarAtual > 0) {
-                inputs.reais.value = (usd * cotacaoDolarAtual).toFixed(2);
-            } else {
-                inputs.reais.value = "";
+            if (origem !== 'reais' && cotacaoDolarAtual > 0) {
+                const dolaresCalculados = (d * 700) / 600000;
+                inputs.reais.value = (dolaresCalculados * cotacaoDolarAtual).toFixed(2);
             }
         }
 
-        // Auxiliar para evitar muitos números quebrados na UI
         function formatar(numero, decimais = 0) {
-            // Usa toFixed para arredondar corretamente sem bugs de ponto flutuante do JS
             return Number(numero.toFixed(decimais));
         }
 
-        // 3. Adiciona os gatilhos (Event Listeners)
-        // Usamos 'input' para atualizar instantaneamente a cada tecla
-        ['diamantes', 'pontos', 'dolares', 'charme'].forEach(campo => {
+        ['diamantes', 'pontos', 'dolares', 'charme', 'reais'].forEach(campo => {
             inputs[campo].addEventListener('input', (e) => calcularTudo(campo));
         });
 
-        // Função do botão Limpar
         function limparCampos() {
             Object.values(inputs).forEach(input => input.value = '');
         }
 
-        // Inicia a API
         buscarCotacaoAPI();
     </script>
 </body>
