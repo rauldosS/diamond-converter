@@ -24,14 +24,10 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: #050505;
 
             /* 1. PLANO DE FUNDO GERAL (Setas apontando para as laterais na sua imagem) */
             /* Aqui você coloca a imagem de fundo que tem a bússola grande opaca */
-            background-image: url('FUNDO_GERAL_AQUI.png'), radial-gradient(circle at center, #1a1505 0%, var(--bg-dark) 50%);
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
 
             color: var(--text-light);
             display: flex;
@@ -41,6 +37,20 @@
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+        }
+
+        body::before {
+            content: "";
+
+            background-image: url('assets/images/fundo.png'), radial-gradient(circle at center, #1a1505 0%, var(--bg-dark) 50%);
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+
+            opacity: 0.1;
+
+            position: fixed;
+            inset: 0;
         }
 
         .calculadora {
@@ -99,6 +109,7 @@
             border-radius: 8px;
             padding: 12px 16px;
             transition: all 0.3s ease;
+            border: 1px solid rgba(238, 175, 97, 0.2);
         }
 
         .input-box:focus-within {
@@ -112,10 +123,12 @@
             background-color: #111111;
 
             /* Coloque a imagem da bússola dourada cortada aqui */
-            background-image: url('FUNDO_INPUT_REAIS_AQUI.png');
+            background-image: url('assets/images/kairos_rosa_destaque.png');
             background-repeat: no-repeat;
-            background-position: right center;
+            background-position: 140%;
             background-size: contain;
+
+            background-size: 300px;
             /* Ou 'cover', dependendo do corte da sua imagem */
         }
 
@@ -169,6 +182,7 @@
             justify-content: center;
             align-items: center;
             gap: 8px;
+            border: 2px solid rgba(238, 175, 97, .6);
         }
 
         .btn:hover {
@@ -215,6 +229,8 @@
         }
 
         .social-links {
+            display: flex;
+            justify-content: center;
             margin-top: 24px;
             display: flex;
             gap: 24px;
@@ -283,11 +299,11 @@
                 charme.
             </div>
         </div>
-    </div>
 
-    <div class="social-links">
-        <a href="https://www.instagram.com/kaiiros.agency/" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@kairos.agency5" target="_blank">TikTok</a>
+        <div class="social-links">
+            <a href="https://www.instagram.com/kaiiros.agency/" target="_blank">Instagram</a>
+            <a href="https://www.tiktok.com/@kairos.agency5" target="_blank">TikTok</a>
+        </div>
     </div>
 
     <script>
