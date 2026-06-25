@@ -279,7 +279,7 @@
         <div class="regra-fixa">
             <div class="icon">i</div>
             <div>
-                <strong>Regra fixa:</strong> 1 diamante = 700 pontos | 12.000.000 pontos = US$ 20 | 5 diamantes = 1
+                <strong>Regra fixa:</strong> 1 diamante = 750 pontos | 12.000.000 pontos = US$ 20 | 5 diamantes = 1
                 charme.
             </div>
         </div>
@@ -327,10 +327,10 @@
             if (origem === 'diamantes') {
                 d = valor;
             } else if (origem === 'pontos') {
-                d = valor / 700;
+                d = valor / 750;
             } else if (origem === 'dolares') {
                 const pontos = valor * 600000;
-                d = pontos / 700;
+                d = pontos / 750;
             } else if (origem === 'charme') {
                 d = valor * 5;
             } else if (origem === 'reais') {
@@ -338,16 +338,16 @@
 
                 const dolares = valor / cotacaoDolarAtual;
                 const pontos = dolares * 600000;
-                d = pontos / 700;
+                d = pontos / 750;
             }
 
             if (origem !== 'diamantes') inputs.diamantes.value = formatar(d);
-            if (origem !== 'pontos') inputs.pontos.value = formatar(d * 700);
-            if (origem !== 'dolares') inputs.dolares.value = formatar((d * 700) / 600000, 2);
+            if (origem !== 'pontos') inputs.pontos.value = formatar(d * 750);
+            if (origem !== 'dolares') inputs.dolares.value = formatar((d * 750) / 600000, 2);
             if (origem !== 'charme') inputs.charme.value = formatar(d / 5);
 
             if (origem !== 'reais' && cotacaoDolarAtual > 0) {
-                const dolaresCalculados = (d * 700) / 600000;
+                const dolaresCalculados = (d * 750) / 600000;
                 inputs.reais.value = (dolaresCalculados * cotacaoDolarAtual).toFixed(2);
             }
         }
