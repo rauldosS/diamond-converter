@@ -68,7 +68,7 @@
         /* 2. LOGO SUPERIOR */
         .brand-header {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center; /* Centraliza a logo */
             margin-bottom: 24px;
         }
 
@@ -250,6 +250,32 @@
         .social-links a:hover {
             color: var(--gold);
         }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0; /* Remove o padding do body para a calculadora esticar mais */
+            }
+            
+            .calculadora {
+                padding: 24px 16px; /* Reduz as margens internas para ganhar espaço pros inputs */
+                border-radius: 0; /* Tira o arredondamento para mesclar com a tela (opcional) */
+                min-height: 100vh; /* Faz a calculadora ocupar a tela toda no celular */
+                box-shadow: none; /* Sem sombra no mobile já que ocupa a tela toda */
+                display: flex;
+                flex-direction: column;
+            }
+
+            .social-links {
+                justify-content: center; /* Centraliza os links do rodapé */
+                padding-bottom: 24px;
+            }
+            
+            /* Ajuste fino na regra fixa para telas muito estreitas */
+            .regra-fixa {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
@@ -257,7 +283,7 @@
 
     <div class="calculadora">
         <div class="brand-header">
-            <img src="assets/images/kairos.png" alt="Kairos Agency" class="img-logo">
+            <img src="assets/images/kairos.jpg" alt="Kairos Agency" class="img-logo">
         </div>
 
         <div class="header">
